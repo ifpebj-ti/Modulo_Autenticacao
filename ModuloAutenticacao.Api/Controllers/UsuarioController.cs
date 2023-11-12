@@ -30,10 +30,10 @@ public class UsuarioController : ControllerBase
         _logger.LogWarning("Criando usuário....");
         try
         {
-
             Usuario usuario = await _usuarioRepository.SalvarUsuario(request);
             _logger.LogWarning("Usuário "+ usuario.nome + " criado, com email " + usuario.email + ".");
-            return StatusCode(201);
+            
+            return StatusCode(201, usuario);
         }
         catch (Exception ex)
         {
@@ -42,7 +42,6 @@ public class UsuarioController : ControllerBase
         }
 
     }
-
     
 
     
