@@ -13,9 +13,8 @@ public class Usuario
     public string nome { get; set; }
 
     [Required]
-    
-    [MaxLength(50)]
-    public int matricula { get; set; }
+    [MaxLength(60)]
+    public string matricula { get; set; }
 
     [MaxLength(60)]
     public string nivel_de_acesso { get; set; }

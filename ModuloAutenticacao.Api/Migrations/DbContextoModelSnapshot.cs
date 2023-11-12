@@ -141,9 +141,10 @@ namespace ModuloAutenticacao.Api.Migrations
                     b.Property<int>("id_filial")
                         .HasColumnType("integer");
 
-                    b.Property<int>("matricula")
-                        .HasMaxLength(50)
-                        .HasColumnType("integer");
+                    b.Property<string>("matricula")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)");
 
                     b.Property<string>("nivel_de_acesso")
                         .IsRequired()

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ModuloAutenticacao.Api.Migrations
 {
     [DbContext(typeof(DbContexto))]
-    [Migration("20231112125341_senha")]
-    partial class senha
+    [Migration("20231112191332_mudandotipodematricula")]
+    partial class mudandotipodematricula
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -144,9 +144,10 @@ namespace ModuloAutenticacao.Api.Migrations
                     b.Property<int>("id_filial")
                         .HasColumnType("integer");
 
-                    b.Property<int>("matricula")
-                        .HasMaxLength(50)
-                        .HasColumnType("integer");
+                    b.Property<string>("matricula")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)");
 
                     b.Property<string>("nivel_de_acesso")
                         .IsRequired()
@@ -157,11 +158,6 @@ namespace ModuloAutenticacao.Api.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
-
-                    b.Property<string>("senha")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
 
                     b.Property<byte[]>("senhaHash")
                         .IsRequired()

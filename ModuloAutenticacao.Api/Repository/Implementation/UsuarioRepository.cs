@@ -47,6 +47,16 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
                 senhaHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(senha));
             }
         }
+
+        public async Task<Usuario> GetUserByEmail(string email)
+        {
+            return await Contexto.Usuario.FirstOrDefaultAsync(u => u.email == email);
+        }
+
+        public async Task<Usuario> GetUserByMatricula(string matricula)
+        {
+            return await Contexto.Usuario.FirstOrDefaultAsync(u => u.matricula == matricula);
+        }
         
     }
 }

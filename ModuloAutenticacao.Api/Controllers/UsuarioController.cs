@@ -30,6 +30,20 @@ public class UsuarioController : ControllerBase
         _logger.LogWarning("Criando usuário....");
         try
         {
+            // Check if the user with the given email already exists
+            var existingUserByEmail = await _usuarioRepository.GetUserByEmail(request.email);
+            if (existingUserByEmail != null)
+            {
+                return Conflict("Usuário com o email fornecido já existe.");
+            }
+
+            // Check if the user with the given matricula already exists
+            var existingUserByMatricula = await _usuarioRepository.GetUserByMatricula(request.matricula);
+            if (existingUserByMatricula != null)
+            {
+                return Conflict("Usuário com a matrícula fornecida já existe.");
+            }
+
             Usuario usuario = await _usuarioRepository.SalvarUsuario(request);
             _logger.LogWarning("Usuário "+ usuario.nome + " criado, com email " + usuario.email + ".");
             

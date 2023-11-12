@@ -1,5 +1,5 @@
 public record UsuarioDTO(
-    int matricula,
+    string matricula,
     string nome,
     string nivel_de_acesso,
     string email,
