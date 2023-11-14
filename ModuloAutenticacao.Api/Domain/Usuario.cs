@@ -13,9 +13,8 @@ public class Usuario
     public string nome { get; set; }
 
     [Required]
-    
-    [MaxLength(50)]
-    public int matricula { get; set; }
+    [MaxLength(60)]
+    public string matricula { get; set; }
 
     [MaxLength(60)]
     public string nivel_de_acesso { get; set; }
@@ -23,10 +22,6 @@ public class Usuario
     [Required]
     [MaxLength(50)]
     public string email { get; set; }
-
-    [Required]
-    [MaxLength(255)]
-    public string senha { get; set; }
 
     [Required]
     public int id_filial { get; set; }
@@ -44,8 +39,9 @@ public class Usuario
     [Required]
     public bool status { get; set; } = false;
     
-    // public byte[] PasswordHash { get; set; }
-    // public byte[] PasswordSalt { get; set; }
+    public byte[] senhaHash { get; set; }
+    public byte[] senhaSalt { get; set; }
+
     // public string RefreshToken { get; set; } = string.Empty;
     // public DateTime TokenCreated { get; set; }
     // public DateTime TokenExpires { get; set; }
