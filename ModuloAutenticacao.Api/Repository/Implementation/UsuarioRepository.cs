@@ -16,7 +16,7 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
         }
 
         
-        public async Task<Usuario> SalvarUsuario(UsuarioDTO request)
+        public async Task<Usuario> SalvarUsuario(CreateUsuarioDTO request)
         {
             CreatePasswordHash(request.senha, out byte[] senhaHash, out byte[] senhaSalt);
             
@@ -48,6 +48,15 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
             }
         }
 
+        public bool VerifyPasswordHash(string senha, byte[] senhaHash, byte[] senhadSalt)
+        {
+            using (var hmac = new HMACSHA512(senhadSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(senha));
+                return computedHash.SequenceEqual(senhaHash);
+            }
+        }
+
         public async Task<Usuario> GetUserByEmail(string email)
         {
             return await Contexto.Usuario.FirstOrDefaultAsync(u => u.email == email);
@@ -57,6 +66,7 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
         {
             return await Contexto.Usuario.FirstOrDefaultAsync(u => u.matricula == matricula);
         }
+
         
     }
 }

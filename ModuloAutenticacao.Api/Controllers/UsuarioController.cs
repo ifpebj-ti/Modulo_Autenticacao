@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
 using ModuloAutenticacao.Api.Repository.Interface;
 
@@ -21,7 +22,7 @@ public class UsuarioController : ControllerBase
 
     [HttpPost]
     [Route("CadastrarUsuario")]
-    public async Task<IActionResult> Post([FromBody] UsuarioDTO request)
+    public async Task<IActionResult> Post([FromBody] CreateUsuarioDTO request)
     {
 
 
@@ -56,6 +57,19 @@ public class UsuarioController : ControllerBase
         }
 
     }
+    
+    [HttpPost("login")]
+    public async Task<ActionResult<string>> Login(LoginDTO request)
+    {
+        var usuario = await _usuarioRepository.GetUserByEmail(request.email);
+
+        if (usuario == null || !_usuarioRepository.VerifyPasswordHash(request.senha, usuario.senhaHash, usuario.senhaSalt))
+        {
+            return BadRequest("User email or password invalidate.");
+        }
+        return Ok();
+    }
+
     
 
     
