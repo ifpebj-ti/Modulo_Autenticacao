@@ -1,5 +1,8 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using ModuloAutenticacao.Api.Repository.Interface;
 
 
@@ -14,10 +17,12 @@ public class UsuarioController : ControllerBase
     private readonly ILogger<UsuarioController> _logger;
     private readonly IUsuarioRepository _usuarioRepository;
 
+
     public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository usuarioRepository)
     {
         _logger = logger;
         _usuarioRepository = usuarioRepository;
+    
     }
 
     [HttpPost]
@@ -63,12 +68,17 @@ public class UsuarioController : ControllerBase
     {
         var usuario = await _usuarioRepository.GetUserByEmail(request.email);
 
-        if (usuario == null || !_usuarioRepository.VerifyPasswordHash(request.senha, usuario.senhaHash, usuario.senhaSalt))
+        if (usuario == null || !_usuarioRepository.VerificarHashSenha(request.senha, usuario.senhaHash, usuario.senhaSalt))
         {
             return BadRequest("User email or password invalidate.");
         }
-        return Ok();
+
+        string Token = _usuarioRepository.CreateToken(usuario);
+
+        return Ok(Token);
     }
+
+    
 
     
 

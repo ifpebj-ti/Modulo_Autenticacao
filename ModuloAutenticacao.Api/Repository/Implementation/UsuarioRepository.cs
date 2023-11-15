@@ -1,6 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ModuloAutenticacao.Api.Repository.Interface;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace ModuloAutenticacao.Api.Repository.Implementation
@@ -9,16 +12,19 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
     {
 
         private readonly DbContexto Contexto;
+        private readonly IConfiguration _configuration;
 
-        public UsuarioRepository (DbContexto contexto)
+
+        public UsuarioRepository (DbContexto contexto, IConfiguration configuration)
         {
             Contexto = contexto;
+            _configuration = configuration;
         }
 
         
         public async Task<Usuario> SalvarUsuario(CreateUsuarioDTO request)
         {
-            CreatePasswordHash(request.senha, out byte[] senhaHash, out byte[] senhaSalt);
+            CriarHashSenha(request.senha, out byte[] senhaHash, out byte[] senhaSalt);
             
             var usuario = new Usuario
             {
@@ -39,7 +45,7 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
             await Contexto.SaveChangesAsync();
             return usuario;
         }
-        private void CreatePasswordHash(string senha, out byte[] senhaHash, out byte[] senhaSalt)
+        private void CriarHashSenha(string senha, out byte[] senhaHash, out byte[] senhaSalt)
         {
             using (var hmac = new HMACSHA512())
             {
@@ -48,7 +54,7 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
             }
         }
 
-        public bool VerifyPasswordHash(string senha, byte[] senhaHash, byte[] senhadSalt)
+        public bool VerificarHashSenha(string senha, byte[] senhaHash, byte[] senhadSalt)
         {
             using (var hmac = new HMACSHA512(senhadSalt))
             {
@@ -65,6 +71,29 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
         public async Task<Usuario> GetUserByMatricula(string matricula)
         {
             return await Contexto.Usuario.FirstOrDefaultAsync(u => u.matricula == matricula);
+        }
+
+        public string CreateToken(Usuario usuario)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, usuario.email),
+                new Claim(ClaimTypes.Role, usuario.nivel_de_acesso)
+            };
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                _configuration.GetSection("AppSettings:Token").Value));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: creds);
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return jwt;
         }
 
         

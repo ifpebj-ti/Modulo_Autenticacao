@@ -6,7 +6,8 @@ namespace ModuloAutenticacao.Api.Repository.Interface
         Task<Usuario> GetUserByEmail(string email);
         Task<Usuario> GetUserByMatricula(string matricula);
 
-        bool VerifyPasswordHash(string senha, byte[] senhaHash, byte[] senhadSalt);
+        bool VerificarHashSenha(string senha, byte[] senhaHash, byte[] senhadSalt);
+        public string CreateToken(Usuario usuario);
         
     
 
