@@ -38,22 +38,22 @@ public class UsuarioController : ControllerBase
         try
         {
             // Verificando se já existe usuário com o email fornecido
-            var existingUserByEmail = await _usuarioRepository.BuscarUsuarioPorEmail(request.email);
-            if (existingUserByEmail != null)
+            var existeEmail = await _usuarioRepository.BuscarUsuarioPorEmail(request.email);
+            if (existeEmail != null)
             {
                 return Conflict("Usuário com o email fornecido já existe.");
             }
 
             // Verificando se já existe usuário com a matricula fornecida
-            var existingUserByMatricula = await _usuarioRepository.BuscarUsuarioPorMatricula(request.matricula);
-            if (existingUserByMatricula != null)
+            var existeMatricula = await _usuarioRepository.BuscarUsuarioPorMatricula(request.matricula);
+            if (existeMatricula != null)
             {
                 return Conflict("Usuário com a matrícula fornecida já existe.");
             }
 
             //Verificando se filial fornecida existe
             var existeFilial = await _filialRepository.BuscarFilialPorId(request.id_filial);
-            if (existeFilial != null)
+            if (existeFilial == null)
             {
                 return Conflict("ID de filial não existe.");
             }
@@ -73,10 +73,11 @@ public class UsuarioController : ControllerBase
 
     }
     
-    [HttpPost("login")]
+    [HttpPost("FazerLogin")]
     public async Task<ActionResult<string>> Login(LoginDTO request)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
+        if(request.email == "" || request.senha == "" ) return BadRequest("Os campos de email e senha preecisam ser preenchidos.");
 
         _logger.LogWarning(string.Format("{0} efetuando login...", request.email ));
 
