@@ -71,7 +71,7 @@ public class UsuarioController : ControllerBase
 
         if (usuario == null || !senhaCorreta)
         {
-            return BadRequest("User email or password invalidate.");
+            return BadRequest("usuário ou email inválido.");
         }
 
         string Token = _autenticacaoService.CriarToken(usuario);
