@@ -39,8 +39,8 @@ public class Usuario
     [Required]
     public bool status { get; set; } = false;
     
-    public byte[] senhaHash { get; set; }
-    public byte[] senhaSalt { get; set; }
+    public string senhaHash { get; set; }
+    public string senhaSalt { get; set; }
 
     // public string RefreshToken { get; set; } = string.Empty;
     // public DateTime TokenCreated { get; set; }

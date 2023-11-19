@@ -12,19 +12,18 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
     {
 
         private readonly DbContexto Contexto;
-        private readonly IConfiguration _configuration;
 
 
-        public UsuarioRepository (DbContexto contexto, IConfiguration configuration)
+        public UsuarioRepository (DbContexto contexto)
         {
             Contexto = contexto;
-            _configuration = configuration;
         }
 
         
         public async Task<Usuario> SalvarUsuario(CreateUsuarioDTO request)
         {
-            CriarHashSenha(request.senha, out byte[] senhaHash, out byte[] senhaSalt);
+            string senhaHash = BCrypt.Net.BCrypt.HashPassword(request.senha);
+            string senhaSalt = BCrypt.Net.BCrypt.GenerateSalt();
             
             var usuario = new Usuario
             {
@@ -45,24 +44,7 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
             await Contexto.SaveChangesAsync();
             return usuario;
         }
-        private void CriarHashSenha(string senha, out byte[] senhaHash, out byte[] senhaSalt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                senhaSalt = hmac.Key;
-                senhaHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(senha));
-            }
-        }
-
-        public bool VerificarHashSenha(string senha, byte[] senhaHash, byte[] senhadSalt)
-        {
-            using (var hmac = new HMACSHA512(senhadSalt))
-            {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(senha));
-                return computedHash.SequenceEqual(senhaHash);
-            }
-        }
-
+    
         public async Task<Usuario> GetUserByEmail(string email)
         {
             return await Contexto.Usuario.FirstOrDefaultAsync(u => u.email == email);
@@ -73,28 +55,6 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
             return await Contexto.Usuario.FirstOrDefaultAsync(u => u.matricula == matricula);
         }
 
-        public string CreateToken(Usuario usuario)
-        {
-            List<Claim> claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Email, usuario.email),
-                new Claim(ClaimTypes.Role, usuario.nivel_de_acesso)
-            };
-
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: creds);
-
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-        return jwt;
-        }
 
         
     }

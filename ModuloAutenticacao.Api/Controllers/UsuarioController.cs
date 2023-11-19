@@ -1,9 +1,6 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using ModuloAutenticacao.Api.Repository.Interface;
+using ModuloAutenticacao.Api.Services.Interface;
 
 
 namespace ModuloAutenticacao.Api.Controllers;
@@ -16,12 +13,14 @@ public class UsuarioController : ControllerBase
         
     private readonly ILogger<UsuarioController> _logger;
     private readonly IUsuarioRepository _usuarioRepository;
+    private  readonly IAutenticacaoService _autenticacaoService;
 
 
-    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository usuarioRepository)
+    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository usuarioRepository, IAutenticacaoService autenticacaoService)
     {
         _logger = logger;
         _usuarioRepository = usuarioRepository;
+        _autenticacaoService = autenticacaoService;
     
     }
 
@@ -67,15 +66,17 @@ public class UsuarioController : ControllerBase
     public async Task<ActionResult<string>> Login(LoginDTO request)
     {
         var usuario = await _usuarioRepository.GetUserByEmail(request.email);
+        bool senhaCorreta = BCrypt.Net.BCrypt.Verify(request.senha, usuario.senhaHash);
 
-        if (usuario == null || !_usuarioRepository.VerificarHashSenha(request.senha, usuario.senhaHash, usuario.senhaSalt))
+
+        if (usuario == null || !senhaCorreta)
         {
             return BadRequest("User email or password invalidate.");
         }
 
-        string Token = _usuarioRepository.CreateToken(usuario);
+        string Token = _autenticacaoService.CreateToken(usuario);
 
-        return Ok(Token);
+        return StatusCode(200, Token);
     }
 
     

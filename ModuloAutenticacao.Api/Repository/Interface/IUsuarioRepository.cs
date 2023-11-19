@@ -5,9 +5,7 @@ namespace ModuloAutenticacao.Api.Repository.Interface
         Task<Usuario> SalvarUsuario(CreateUsuarioDTO request);
         Task<Usuario> GetUserByEmail(string email);
         Task<Usuario> GetUserByMatricula(string matricula);
-
-        bool VerificarHashSenha(string senha, byte[] senhaHash, byte[] senhadSalt);
-        public string CreateToken(Usuario usuario);
+        
         
     
 
