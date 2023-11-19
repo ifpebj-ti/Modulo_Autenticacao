@@ -22,8 +22,8 @@ namespace ModuloAutenticacao.Api.Services.AutenticacaoService
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, usuario.email.ToString()),
-                new Claim(ClaimTypes.Role, usuario.nivel_de_acesso.ToString())
+                new Claim("email", usuario.email.ToString()),
+                new Claim("nivel_acesso", usuario.nivel_de_acesso.ToString())
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
