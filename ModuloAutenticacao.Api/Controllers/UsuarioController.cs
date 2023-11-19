@@ -65,18 +65,35 @@ public class UsuarioController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<string>> Login(LoginDTO request)
     {
-        var usuario = await _usuarioRepository.BuscarUsuarioPorEmail(request.email);
-        bool senhaCorreta = BCrypt.Net.BCrypt.Verify(request.senha, usuario.senhaHash);
+        if (!ModelState.IsValid) return BadRequest(ModelState);
 
-
-        if (usuario == null || !senhaCorreta)
+        _logger.LogWarning(string.Format("{0} efetuando login...", request.email ));
+        try
         {
-            return BadRequest("usuário ou email inválido.");
+            Usuario usuario = await _usuarioRepository.BuscarUsuarioPorEmail(request.email);
+            bool senhaCorreta = BCrypt.Net.BCrypt.Verify(request.senha, usuario.senhaHash);
+
+            if (usuario == null || !senhaCorreta)
+            {
+                return BadRequest("usuário ou email inválido.");
+            }
+
+            string Token = _autenticacaoService.CriarToken(usuario);
+            _logger.LogWarning("Usuário {0} logado...", usuario.email);
+            return StatusCode(200, Token);
         }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex.Message);
+            return BadRequest();
+        }
+        
 
-        string Token = _autenticacaoService.CriarToken(usuario);
 
-        return StatusCode(200, Token);
+    
+
+        
+
     }
 
     
