@@ -51,6 +51,11 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
             return await Contexto.Usuario.FirstOrDefaultAsync(u => u.matricula == matricula);
         }
 
+        public async Task<Usuario> BuscarFilialPorId (int id_filial)
+        {
+            return await Contexto.Usuario.FirstOrDefaultAsync(u => u.id_filial == id_filial);
+        }
+
 
         
     }

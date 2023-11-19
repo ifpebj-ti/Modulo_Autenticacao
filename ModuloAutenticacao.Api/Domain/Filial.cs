@@ -1,34 +1,37 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 public class Filial
 {
 
     [Required]
     [Key]
-    public int Id_Filial{ get; set; }
+    public int id_filial{ get; set; }
 
     [Required]
     [MaxLength(100)]
-    public string Nome { get; set; }
+    public string nome { get; set; }
 
     [Required]
-    public string Id_endereco { get; set; }
+    public int id_endereco { get; set; }
 
     [Required]
     [MaxLength(50)]
-    public string Email { get; set; }
+    public string email { get; set; }
 
     [Required]
     [MaxLength(25)]
-    public string Celular { get; set; }
+    public string celular { get; set; }
 
     [Required]
     [MaxLength(25)]
-    public string Telefone_fixo { get; set; }
+    public string telefone_fixo { get; set; }
 
     [Required]
     [MaxLength(25)]
-    public string Cnpj { get; set; }
+    public string cnpj { get; set; }
     
 
 

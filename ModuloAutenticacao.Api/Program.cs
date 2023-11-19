@@ -24,6 +24,7 @@ builder.Services.AddDbContext<DbContexto>(options =>
 
 //Adicionar inje��es dos repositories
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IFilialRepository, FilialRepository>();
 
 //Injeções dos services
 builder.Services.AddScoped<IAutenticacaoService, AutenticacaoService>();

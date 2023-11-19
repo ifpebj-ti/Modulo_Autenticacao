@@ -5,6 +5,7 @@ namespace ModuloAutenticacao.Api.Repository.Interface
         Task<Usuario> SalvarUsuario(UsuarioDTO request);
         Task<Usuario> BuscarUsuarioPorEmail(string email);
         Task<Usuario> BuscarUsuarioPorMatricula(string matricula);
+        Task<Usuario> BuscarFilialPorId (int id_filial);
         
         
     

@@ -14,13 +14,15 @@ public class UsuarioController : ControllerBase
     private readonly ILogger<UsuarioController> _logger;
     private readonly IUsuarioRepository _usuarioRepository;
     private  readonly IAutenticacaoService _autenticacaoService;
+    private  readonly IFilialRepository _filialRepository;
 
 
-    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository usuarioRepository, IAutenticacaoService autenticacaoService)
+    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository usuarioRepository, IAutenticacaoService autenticacaoService, IFilialRepository filialRepository)
     {
         _logger = logger;
         _usuarioRepository = usuarioRepository;
         _autenticacaoService = autenticacaoService;
+        _filialRepository = filialRepository;
     
     }
 
@@ -35,22 +37,31 @@ public class UsuarioController : ControllerBase
         _logger.LogWarning("Criando usuário....");
         try
         {
-            // Check if the user with the given email already exists
+            // Verificando se já existe usuário com o email fornecido
             var existingUserByEmail = await _usuarioRepository.BuscarUsuarioPorEmail(request.email);
             if (existingUserByEmail != null)
             {
                 return Conflict("Usuário com o email fornecido já existe.");
             }
 
-            // Check if the user with the given matricula already exists
+            // Verificando se já existe usuário com a matricula fornecida
             var existingUserByMatricula = await _usuarioRepository.BuscarUsuarioPorMatricula(request.matricula);
             if (existingUserByMatricula != null)
             {
                 return Conflict("Usuário com a matrícula fornecida já existe.");
             }
 
+            //Verificando se filial fornecida existe
+            var existeFilial = await _filialRepository.BuscarFilialPorId(request.id_filial);
+            if (existeFilial != null)
+            {
+                return Conflict("ID de filial não existe.");
+            }
+
+
             Usuario usuario = await _usuarioRepository.SalvarUsuario(request);
             _logger.LogWarning("Usuário "+ usuario.nome + " criado, com email " + usuario.email + ".");
+
             
             return StatusCode(201, usuario);
         }
@@ -68,6 +79,7 @@ public class UsuarioController : ControllerBase
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
         _logger.LogWarning(string.Format("{0} efetuando login...", request.email ));
+
         try
         {
             Usuario usuario = await _usuarioRepository.BuscarUsuarioPorEmail(request.email);
