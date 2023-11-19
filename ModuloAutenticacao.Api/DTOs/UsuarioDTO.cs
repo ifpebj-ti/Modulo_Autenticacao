@@ -1,4 +1,4 @@
-public record CreateUsuarioDTO(
+public record UsuarioDTO(
     string matricula,
     string nome,
     string nivel_de_acesso,

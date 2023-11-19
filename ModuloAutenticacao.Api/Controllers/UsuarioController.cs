@@ -26,7 +26,7 @@ public class UsuarioController : ControllerBase
 
     [HttpPost]
     [Route("CadastrarUsuario")]
-    public async Task<IActionResult> Post([FromBody] CreateUsuarioDTO request)
+    public async Task<IActionResult> Post([FromBody] UsuarioDTO request)
     {
 
 
@@ -36,14 +36,14 @@ public class UsuarioController : ControllerBase
         try
         {
             // Check if the user with the given email already exists
-            var existingUserByEmail = await _usuarioRepository.GetUserByEmail(request.email);
+            var existingUserByEmail = await _usuarioRepository.BuscarUsuarioPorEmail(request.email);
             if (existingUserByEmail != null)
             {
                 return Conflict("Usuário com o email fornecido já existe.");
             }
 
             // Check if the user with the given matricula already exists
-            var existingUserByMatricula = await _usuarioRepository.GetUserByMatricula(request.matricula);
+            var existingUserByMatricula = await _usuarioRepository.BuscarUsuarioPorMatricula(request.matricula);
             if (existingUserByMatricula != null)
             {
                 return Conflict("Usuário com a matrícula fornecida já existe.");
@@ -65,7 +65,7 @@ public class UsuarioController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<string>> Login(LoginDTO request)
     {
-        var usuario = await _usuarioRepository.GetUserByEmail(request.email);
+        var usuario = await _usuarioRepository.BuscarUsuarioPorEmail(request.email);
         bool senhaCorreta = BCrypt.Net.BCrypt.Verify(request.senha, usuario.senhaHash);
 
 
@@ -74,7 +74,7 @@ public class UsuarioController : ControllerBase
             return BadRequest("User email or password invalidate.");
         }
 
-        string Token = _autenticacaoService.CreateToken(usuario);
+        string Token = _autenticacaoService.CriarToken(usuario);
 
         return StatusCode(200, Token);
     }

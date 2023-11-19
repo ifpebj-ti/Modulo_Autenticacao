@@ -18,7 +18,7 @@ namespace ModuloAutenticacao.Api.Services.AutenticacaoService
         }
 
     
-        public string CreateToken(Usuario usuario)
+        public string CriarToken(Usuario usuario)
         {
             List<Claim> claims = new List<Claim>
             {

@@ -2,9 +2,9 @@ namespace ModuloAutenticacao.Api.Repository.Interface
 {
     public interface IUsuarioRepository
     {
-        Task<Usuario> SalvarUsuario(CreateUsuarioDTO request);
-        Task<Usuario> GetUserByEmail(string email);
-        Task<Usuario> GetUserByMatricula(string matricula);
+        Task<Usuario> SalvarUsuario(UsuarioDTO request);
+        Task<Usuario> BuscarUsuarioPorEmail(string email);
+        Task<Usuario> BuscarUsuarioPorMatricula(string matricula);
         
         
     

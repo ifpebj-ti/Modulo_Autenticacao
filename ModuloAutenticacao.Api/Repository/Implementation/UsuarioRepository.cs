@@ -16,7 +16,7 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
         }
 
         
-        public async Task<Usuario> SalvarUsuario(CreateUsuarioDTO request)
+        public async Task<Usuario> SalvarUsuario(UsuarioDTO request)
         {
             string senhaHash = BCrypt.Net.BCrypt.HashPassword(request.senha);
             string senhaSalt = BCrypt.Net.BCrypt.GenerateSalt();
@@ -41,12 +41,12 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
             return usuario;
         }
     
-        public async Task<Usuario> GetUserByEmail(string email)
+        public async Task<Usuario> BuscarUsuarioPorEmail(string email)
         {
             return await Contexto.Usuario.FirstOrDefaultAsync(u => u.email == email);
         }
 
-        public async Task<Usuario> GetUserByMatricula(string matricula)
+        public async Task<Usuario> BuscarUsuarioPorMatricula(string matricula)
         {
             return await Contexto.Usuario.FirstOrDefaultAsync(u => u.matricula == matricula);
         }
