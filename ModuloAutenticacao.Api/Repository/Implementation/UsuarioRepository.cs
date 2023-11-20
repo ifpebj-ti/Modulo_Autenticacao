@@ -1,7 +1,6 @@
-
 using Microsoft.EntityFrameworkCore;
+
 using ModuloAutenticacao.Api.Repository.Interface;
-using System.Security.Cryptography;
 
 namespace ModuloAutenticacao.Api.Repository.Implementation
 {
@@ -10,15 +9,17 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
 
         private readonly DbContexto Contexto;
 
+
         public UsuarioRepository (DbContexto contexto)
         {
             Contexto = contexto;
         }
 
         
-        public async Task<Usuario> SalvarUsuario(CreateUsuarioDTO request)
+        public async Task<Usuario> SalvarUsuario(UsuarioDTO request)
         {
-            CreatePasswordHash(request.senha, out byte[] senhaHash, out byte[] senhaSalt);
+            string senhaHash = BCrypt.Net.BCrypt.HashPassword(request.senha);
+            string senhaSalt = BCrypt.Net.BCrypt.GenerateSalt();
             
             var usuario = new Usuario
             {
@@ -39,33 +40,22 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
             await Contexto.SaveChangesAsync();
             return usuario;
         }
-        private void CreatePasswordHash(string senha, out byte[] senhaHash, out byte[] senhaSalt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                senhaSalt = hmac.Key;
-                senhaHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(senha));
-            }
-        }
-
-        public bool VerifyPasswordHash(string senha, byte[] senhaHash, byte[] senhadSalt)
-        {
-            using (var hmac = new HMACSHA512(senhadSalt))
-            {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(senha));
-                return computedHash.SequenceEqual(senhaHash);
-            }
-        }
-
-        public async Task<Usuario> GetUserByEmail(string email)
+    
+        public async Task<Usuario> BuscarUsuarioPorEmail(string email)
         {
             return await Contexto.Usuario.FirstOrDefaultAsync(u => u.email == email);
         }
 
-        public async Task<Usuario> GetUserByMatricula(string matricula)
+        public async Task<Usuario> BuscarUsuarioPorMatricula(string matricula)
         {
             return await Contexto.Usuario.FirstOrDefaultAsync(u => u.matricula == matricula);
         }
+
+        public async Task<Usuario> BuscarFilialPorId (int id_filial)
+        {
+            return await Contexto.Usuario.FirstOrDefaultAsync(u => u.id_filial == id_filial);
+        }
+
 
         
     }

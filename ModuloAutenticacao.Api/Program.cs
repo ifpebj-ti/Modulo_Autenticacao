@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using ModuloAutenticacao.Api.Repository;
 using ModuloAutenticacao.Api.Repository.Implementation;
 using ModuloAutenticacao.Api.Repository.Interface;
+using ModuloAutenticacao.Api.Services.AutenticacaoService;
+using ModuloAutenticacao.Api.Services.Interface;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +24,10 @@ builder.Services.AddDbContext<DbContexto>(options =>
 
 //Adicionar inje��es dos repositories
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IFilialRepository, FilialRepository>();
+
+//Injeções dos services
+builder.Services.AddScoped<IAutenticacaoService, AutenticacaoService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
