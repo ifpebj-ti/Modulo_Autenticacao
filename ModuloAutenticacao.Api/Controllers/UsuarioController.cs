@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModuloAutenticacao.Api.Repository.Interface;
 using ModuloAutenticacao.Api.Services.Interface;
@@ -26,7 +27,7 @@ public class UsuarioController : ControllerBase
     
     }
 
-    [HttpPost]
+    [HttpPost, Authorize]
     [Route("CadastrarUsuario")]
     public async Task<IActionResult> Post([FromBody] UsuarioDTO request)
     {
