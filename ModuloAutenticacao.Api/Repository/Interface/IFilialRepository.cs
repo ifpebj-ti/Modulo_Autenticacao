@@ -1,5 +1,8 @@
-namespace ModuloAutenticacao.Api.Repository.Interface
-{
+using ModuloAutenticacao.Api.Domain;
+using ModuloAutenticacao.Api.DTOs;
+
+namespace ModuloAutenticacao.Api.Repository.Interface;
+
     public interface IFilialRepository
     {
         Task<Filial> SalvarFilial(FilialDTO request);
@@ -8,4 +11,4 @@ namespace ModuloAutenticacao.Api.Repository.Interface
         Task<Filial> BuscarFilialPorCNPJ (string cnpj);
         
     }
-}
+

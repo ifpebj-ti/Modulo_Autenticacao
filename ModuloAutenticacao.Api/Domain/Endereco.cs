@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace ModuloAutenticacao.Api.Domain;
 
 public class Enderecos
 {

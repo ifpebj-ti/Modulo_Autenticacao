@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ModuloAutenticacao.Api.Domain;
+using ModuloAutenticacao.Api.DTOs;
 using ModuloAutenticacao.Api.Repository.Interface;
 
 
@@ -21,7 +24,7 @@ public class FilialController : ControllerBase
     
     }
 
-    [HttpPost]
+    [HttpPost, Authorize ]
     [Route("CriarFilial")]
     public async Task<IActionResult> Post([FromBody] FilialDTO request)
     {
@@ -40,6 +43,7 @@ public class FilialController : ControllerBase
             }
 
             var cnpjFilialExiste = await _filialRepository.BuscarFilialPorCNPJ(request.cnpj);
+    
             if (cnpjFilialExiste != null)
             {
                 return Conflict("Já existe uma filial com esse CNPJ.");

@@ -1,3 +1,4 @@
+namespace ModuloAutenticacao.Api.DTOs;
 public record UsuarioDTO(
     string matricula,
     string nome,

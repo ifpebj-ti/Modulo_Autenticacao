@@ -1,5 +1,8 @@
-namespace ModuloAutenticacao.Api.Repository.Interface
-{
+using ModuloAutenticacao.Api.Domain;
+using ModuloAutenticacao.Api.DTOs;
+
+namespace ModuloAutenticacao.Api.Repository.Interface;
+
     public interface IUsuarioRepository
     {
         Task<Usuario> SalvarUsuario(UsuarioDTO request);
@@ -11,4 +14,4 @@ namespace ModuloAutenticacao.Api.Repository.Interface
     
 
     }
-}
+
