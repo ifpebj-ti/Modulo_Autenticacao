@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModuloAutenticacao.Api.Domain;
 using ModuloAutenticacao.Api.DTOs;
@@ -23,7 +24,7 @@ public class FilialController : ControllerBase
     
     }
 
-    [HttpPost]
+    [HttpPost, Authorize ]
     [Route("CriarFilial")]
     public async Task<IActionResult> Post([FromBody] FilialDTO request)
     {

@@ -29,7 +29,7 @@ public class UsuarioController : ControllerBase
     
     }
 
-    [HttpPost]
+    [HttpPost, Authorize]
     [Route("CadastrarUsuario")]
     public async Task<IActionResult> Post([FromBody] UsuarioDTO request)
     {
