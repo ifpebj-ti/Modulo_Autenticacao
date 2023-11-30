@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ModuloAutenticacao.Api.Domain;
+using ModuloAutenticacao.Api.DTOs;
 using ModuloAutenticacao.Api.Repository.Interface;
 using ModuloAutenticacao.Api.Services.Interface;
 
@@ -27,7 +29,7 @@ public class UsuarioController : ControllerBase
     
     }
 
-    [HttpPost, Authorize]
+    [HttpPost]
     [Route("CadastrarUsuario")]
     public async Task<IActionResult> Post([FromBody] UsuarioDTO request)
     {
@@ -89,17 +91,17 @@ public class UsuarioController : ControllerBase
 
             if (usuario == null || !senhaCorreta)
             {
-                return BadRequest("usuário ou email inválido.");
+                return BadRequest("Usuário ou inválido.");
             }
 
             string Token = _autenticacaoService.CriarToken(usuario);
-            _logger.LogWarning("Usuário {0} logado...", usuario.email);
+            _logger.LogWarning("Usuário {0} logando...", usuario.email);
             return StatusCode(200, Token);
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex.Message);
-            return BadRequest();
+            return BadRequest("Usuário ou senha inválido.");
         }
         
 

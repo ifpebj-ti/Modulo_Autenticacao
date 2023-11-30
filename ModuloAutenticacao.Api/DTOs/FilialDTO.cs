@@ -1,3 +1,4 @@
+namespace ModuloAutenticacao.Api.DTOs;
 public record FilialDTO(
     string nome,
     int id_endereco,

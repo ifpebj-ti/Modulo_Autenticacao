@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using ModuloAutenticacao.Api.Repository;
 using ModuloAutenticacao.Api.Repository.Implementation;
 using ModuloAutenticacao.Api.Repository.Interface;
-using ModuloAutenticacao.Api.Services.AutenticacaoService;
+using ModuloAutenticacao.Api.Services;
 using ModuloAutenticacao.Api.Services.Interface;
 using Serilog;
 

@@ -1,8 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
 
-
+namespace ModuloAutenticacao.Api.Domain;
 public class Filial
 {
 

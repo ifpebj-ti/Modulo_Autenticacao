@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-
+using ModuloAutenticacao.Api.Domain;
+using ModuloAutenticacao.Api.DTOs;
 using ModuloAutenticacao.Api.Repository.Interface;
 
-namespace ModuloAutenticacao.Api.Repository.Implementation
-{
+namespace ModuloAutenticacao.Api.Repository.Implementation;
+
     public class UsuarioRepository : IUsuarioRepository
     {
 
@@ -59,4 +60,4 @@ namespace ModuloAutenticacao.Api.Repository.Implementation
 
         
     }
-}
+

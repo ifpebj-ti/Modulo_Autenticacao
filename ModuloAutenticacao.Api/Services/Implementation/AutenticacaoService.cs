@@ -1,11 +1,11 @@
 using Microsoft.IdentityModel.Tokens;
+using ModuloAutenticacao.Api.Domain;
 using ModuloAutenticacao.Api.Services.Interface;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 
-namespace ModuloAutenticacao.Api.Services.AutenticacaoService
-{
+namespace ModuloAutenticacao.Api.Services;
     public class AutenticacaoService : IAutenticacaoService
     {
 
@@ -41,6 +41,6 @@ namespace ModuloAutenticacao.Api.Services.AutenticacaoService
             return jwt;
         }
 
-        
+    
     }
-}
+
