@@ -27,7 +27,7 @@ namespace ModuloAutenticacao.Api.Services;
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value));
+                Environment.GetEnvironmentVariable("Token")));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
