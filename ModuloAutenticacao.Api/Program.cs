@@ -2,12 +2,14 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using ModuloAutenticacao.Api.Repository;
 using ModuloAutenticacao.Api.Repository.Implementation;
 using ModuloAutenticacao.Api.Repository.Interface;
 using ModuloAutenticacao.Api.Services;
 using ModuloAutenticacao.Api.Services.Interface;
 using Serilog;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 var logger = new LoggerConfiguration()
@@ -22,7 +24,8 @@ builder.Services.AddControllers();
 
 //insira a string connection
 builder.Services.AddDbContext<DbContexto>(options =>
-	options.UseNpgsql(builder.Configuration["ConnectionString"])
+	options.UseNpgsql(Environment.GetEnvironmentVariable("ConnectionString"))
+    
 );
 
 //Adicionar inje��es dos repositories
@@ -34,7 +37,19 @@ builder.Services.AddScoped<IAutenticacaoService, AutenticacaoService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -42,7 +57,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+                .GetBytes(Environment.GetEnvironmentVariable("Token"))),
+
             ValidateIssuer = false,
             ValidateAudience = false
         };

@@ -16,7 +16,10 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7208;http://localhost:5299",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Token":"djdjjdjdmmvnnatsrsrsrrsrsrrsr****52146788%hdaqopvcg/%$)()(shjshhshshshhshsshhshs",
+        "ConnectionString": "Host=150.136.54.24:5436;Username=postgres;Password=admin;Database=unifieddb" 
+
       }
     },
     "IIS Express": {
