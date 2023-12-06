@@ -101,7 +101,7 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogWarning(ex.Message);
-            return BadRequest("Usuário ou senha inválido.");
+            return BadRequest(ex);
         }
         
 
