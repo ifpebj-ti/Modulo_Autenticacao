@@ -24,7 +24,7 @@ builder.Services.AddControllers();
 
 //insira a string connection
 builder.Services.AddDbContext<DbContexto>(options =>
-	options.UseNpgsql(Environment.GetEnvironmentVariable("ConnectionString"))
+	options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING_AUTH"))
     
 );
 
